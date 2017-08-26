@@ -3,7 +3,7 @@ import uglify from 'rollup-plugin-uglify';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import { argv } from 'yargs';
 
-const format = argv.format || argv.f || 'iife';
+const destFormat = argv.format || argv.f || 'iife';
 const compress = argv.uglify;
 
 const babelOptions = {
@@ -16,16 +16,15 @@ const dest = {
   amd: `dist/amd/i18nextBrowserLanguageDetector${compress ? '.min' : ''}.js`,
   umd: `dist/umd/i18nextBrowserLanguageDetector${compress ? '.min' : ''}.js`,
   iife: `dist/iife/i18nextBrowserLanguageDetector${compress ? '.min' : ''}.js`
-}[format];
+}[destFormat];
 
 export default {
+  moduleName: 'i18nextBrowserLanguageDetector',
   entry: 'src/index.js',
-  format,
+  dest: dest,
+  format: destFormat,
   plugins: [
     babel(babelOptions),
     nodeResolve({ jsnext: true })
-  ].concat(compress ? uglify() : []),
-  moduleName: 'i18nextBrowserLanguageDetector',
-  // moduleId: 'i18nextBrowserLanguageDetector',
-  dest
+  ].concat(compress ? uglify() : [])
 };

@@ -7,7 +7,7 @@ export default {
     let path = window.location.pathname;    
 
     Object.keys(mapping).forEach(function (key) {
-      let searchFor = '/' + key + '/';
+      let searchFor = `/${key}/`;
       if (path.includes(searchFor)) {
         found = mapping[key];
         return;
