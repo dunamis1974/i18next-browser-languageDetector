@@ -190,12 +190,33 @@
     }
   };
 
+  var path = {
+    name: 'path',
+
+    lookup: function lookup(options) {
+      var found = void 0;
+      var mapping = options.pathMapping;
+      var path = window.location.pathname;
+
+      Object.keys(mapping).forEach(function (key) {
+        var searchFor = '/' + key + '/';
+        if (path.includes(searchFor)) {
+          found = mapping[key];
+          return;
+        }
+      });
+
+      return found;
+    }
+  };
+
   function getDefaults() {
     return {
-      order: ['querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag'],
+      order: ['querystring', 'path', 'cookie', 'localStorage', 'navigator', 'htmlTag'],
       lookupQuerystring: 'lng',
       lookupCookie: 'i18next',
       lookupLocalStorage: 'i18nextLng',
+      pathMapping: { en: 'en' },
 
       // cache user language
       caches: ['localStorage'],
@@ -207,7 +228,7 @@
 
   var Browser = function () {
     function Browser(services) {
-      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       babelHelpers.classCallCheck(this, Browser);
 
       this.type = 'languageDetector';
@@ -219,8 +240,8 @@
     babelHelpers.createClass(Browser, [{
       key: 'init',
       value: function init(services) {
-        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-        var i18nOptions = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+        var i18nOptions = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
         this.services = services;
         this.options = defaults(options, this.options || {}, getDefaults());
@@ -228,6 +249,7 @@
 
         this.addDetector(cookie$1);
         this.addDetector(querystring);
+        this.addDetector(path);
         this.addDetector(localStorage);
         this.addDetector(navigator$1);
         this.addDetector(htmlTag);

@@ -4,13 +4,15 @@ import querystring from './browserLookups/querystring';
 import localStorage from './browserLookups/localStorage';
 import navigator from './browserLookups/navigator';
 import htmlTag from './browserLookups/htmlTag';
+import path from './browserLookups/path';
 
 function getDefaults() {
   return {
-    order: ['querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag'],
+    order: ['querystring', 'path', 'cookie', 'localStorage', 'navigator', 'htmlTag'],
     lookupQuerystring: 'lng',
     lookupCookie: 'i18next',
     lookupLocalStorage: 'i18nextLng',
+    pathMapping: { en: 'en' },
 
     // cache user language
     caches: ['localStorage'],
@@ -35,6 +37,7 @@ class Browser {
 
     this.addDetector(cookie);
     this.addDetector(querystring);
+    this.addDetector(path);
     this.addDetector(localStorage);
     this.addDetector(navigator);
     this.addDetector(htmlTag);
